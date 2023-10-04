@@ -62,14 +62,20 @@ woox_pairs = ["None"] + woox_pairs
 st.sidebar.title("Advanced Options")
 
 # Add quick filter options
-quick_filter = st.sidebar.radio("Time Filter", ["None", "Last 24h", "Current Week", "Current Month"])
+quick_filter = st.sidebar.radio("Time Filter", ["None", "Today", "Yesterday", "Current Week", "Current Month"])
+
 
 if quick_filter == "None":
     start_date = st.sidebar.date_input("Start Date")
     end_date = st.sidebar.date_input("End Date")
-elif quick_filter == "Last 24h":
+elif quick_filter == "Today":
     end_date = pd.to_datetime("now", utc=True)  # Current date and time
-    start_date = end_date - pd.Timedelta(hours=24)
+    start_date = end_date.replace(hour=0, minute=0, second=0, microsecond=0)
+elif quick_filter == "Yesterday":
+    end_date = pd.to_datetime("now", utc=True)  # Current date and time
+    start_date = end_date - pd.Timedelta(days=1)
+    start_date = start_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_date = start_date.replace(hour=23, minute=59, second=59, microsecond=999999)
 elif quick_filter == "Current Week":
     end_date = pd.to_datetime("now", utc=True)  # Current date and time
     start_date = end_date - pd.Timedelta(days=end_date.weekday())  # Start of the week
@@ -82,8 +88,8 @@ start_t = int(pd.Timestamp(f"{start_date} 00:00:00").timestamp() * 1000)
 end_t = int(pd.Timestamp(f"{end_date} 23:59:59").timestamp() * 1000)
 
 # Auto-refresh settings
-enable_auto_refresh = st.sidebar.checkbox("Enable Auto-Refresh", value=False)
-refresh_interval = st.sidebar.slider("Refresh Interval (seconds)", 5, 300, 60)  # from 5 to 300 seconds, default 60 seconds
+enable_auto_refresh = st.sidebar.checkbox("Enable Auto-Refresh", value=True)
+refresh_interval = st.sidebar.slider("Refresh Interval (seconds)", 5, 300, 60)  # from 5 to 60 seconds, default 10 seconds
 
 
 
