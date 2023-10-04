@@ -82,8 +82,8 @@ start_t = int(pd.Timestamp(f"{start_date} 00:00:00").timestamp() * 1000)
 end_t = int(pd.Timestamp(f"{end_date} 23:59:59").timestamp() * 1000)
 
 # Auto-refresh settings
-enable_auto_refresh = st.sidebar.checkbox("Enable Auto-Refresh", value=True)
-refresh_interval = st.sidebar.slider("Refresh Interval (seconds)", 5, 300, 60)  # from 5 to 60 seconds, default 10 seconds
+enable_auto_refresh = st.sidebar.checkbox("Enable Auto-Refresh", value=False)
+refresh_interval = st.sidebar.slider("Refresh Interval (seconds)", 5, 300, 60)  # from 5 to 300 seconds, default 60 seconds
 
 
 
